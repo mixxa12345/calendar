@@ -4,17 +4,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.ParseException;
 
+import models.Event;
+import views.DetailView;
 import views.MainView;
 
 public class ListenerManager {
 	private MainView frame;
+	private DBController DBC;
 
-	public ListenerManager(MainView frame) {
+	public ListenerManager(MainView frame, DBController DBC) {
 		this.frame = frame;
+		this.DBC = DBC;
 	}
 
 	public void initListener() {
-		
+		frame.getMenu().setDBOnEditor(DBC);
 		frame.getMenu().getCreateButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -23,11 +27,14 @@ public class ListenerManager {
 			}
 		});
 		
+		//add
 		frame.getMenu().getDView().getSubButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
-					frame.getMenu().addEventPanel();
+					Event ev = frame.getMenu().addEventPanel();
+					DBC.insertDB(DBC.loadDB(), ev);
+					
 				} catch (ParseException e) {
 					//e.printStackTrace();
 				}

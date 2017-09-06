@@ -8,11 +8,18 @@ public class Event {
 	private Date date;
 	private String detail;
 	private int id;
+	private String dateFormat;
 	
 	public Event(String s, String dt) throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat("ddMMMyyyyh:mm");
+		dateFormat = s;
 		detail = dt;
 		date = format.parse(s);
+	}
+	
+	public String toString() {
+		return Integer.toString(id)+ " " + date.getDate()+" "+date.getMonth()+" "+(date.getYear()+1900)+" "+date.getHours()+" "+date.getMinutes();
+		
 	}
 	
 	public int getId() {
@@ -31,5 +38,7 @@ public class Event {
 		return detail;
 	}
 	
-	
+	public String getDateFormat() {
+		return dateFormat;
+	}
 }

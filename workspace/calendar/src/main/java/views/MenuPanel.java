@@ -19,6 +19,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
+import controllers.DBController;
+import controllers.EditController;
 import models.Event;
 
 public class MenuPanel extends JPanel {
@@ -34,8 +36,10 @@ public class MenuPanel extends JPanel {
 
 	private DetailView dView = new DetailView();
 	ArrayList<Event> calendar = new ArrayList<>();
+	private EditController editor;
 
 	public MenuPanel() {
+		editor = new EditController(dView, calendar);
 		dView.initFrame();
 		eventFlow.setLayout(new BoxLayout(eventFlow, BoxLayout.Y_AXIS));
 		eventFlow.setBackground(Color.BLACK);
@@ -85,10 +89,20 @@ public class MenuPanel extends JPanel {
 		return inner;
 	}
 
-	public void addEventPanel() throws ParseException {
+	public Event addEventPanel() throws ParseException {
 		eventFlow.removeAll();
-		calendar.add(new Event(dView.getComboResult(), dView.getInputText()));
-		Collections.sort(calendar, new Comparator<Event>() {
+		Event ev = new Event(dView.getComboResult(), dView.getInputText());
+		if (calendar.size()>0) {
+			ev.setId(calendar.get(calendar.size()-1).getId()+1);
+		}
+		calendar.add(ev);
+		calendarToPanel();
+		return ev;
+	}
+
+	public void calendarToPanel() {
+		ArrayList<Event> viewList = calendar;
+		Collections.sort(viewList, new Comparator<Event>() {
 			@Override
 			public int compare(Event o1, Event o2) {
 				Date oo1 = o1.getDate();
@@ -101,21 +115,24 @@ public class MenuPanel extends JPanel {
 					return 1;
 			}
 		});
-		
-		for (int i = 0; i < calendar.size(); i++) {
-			Event current = calendar.get(i); 
-			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId());
+		for (int i = 0; i < viewList.size(); i++) {
+			Event current = viewList.get(i);
+			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(), editor);
 			eventFlow.add(ev);
 		}
-		//eventFlow = new JPanel();
 	}
 
 	public ArrayList<Event> getCalendar() {
 		return calendar;
 	}
-	
+
 	public JPanel getEventFlow() {
 		return eventFlow;
+	}
+
+	public void setDBOnEditor(DBController DBC) {
+		editor.setDBC(DBC);
+		;
 	}
 
 	public DetailView getDView() {

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
+import java.util.Date;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -15,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
+import models.Event;
+
 public class DetailView extends JFrame {
 	private int frameWidth = 320;
 	private int frameHeight = 440;
@@ -24,7 +27,7 @@ public class DetailView extends JFrame {
 	private JButton subButton = new JButton("Submit");
 	private JButton delButton = new JButton("Cancel");
 
-	JTextArea text = new JTextArea();
+	private JTextArea text = new JTextArea();
 	
 	private String[] hour = new String[24];
 	private String[] min = new String[60];
@@ -44,7 +47,7 @@ public class DetailView extends JFrame {
 		}
 		dCom = new JComboBox(day1);
 		for (int i = 0; i < 24; i++) {
-			hour[i] = Integer.toString(i+1);
+			hour[i] = Integer.toString(i);
 		}
 		hourCom = new JComboBox(hour);
 		for (int i = 0; i < 60; i++) {
@@ -94,8 +97,8 @@ public class DetailView extends JFrame {
 
 	private JComponent createDateDetail() {
 		JPanel inner = new JPanel();
+		text.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		JScrollPane areaScrollPane = new JScrollPane(text);
-		areaScrollPane.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		areaScrollPane.setPreferredSize(new Dimension(300, 300));
 		inner.add(areaScrollPane);
 		return inner;
@@ -120,6 +123,17 @@ public class DetailView extends JFrame {
 		return result;
 	}
 	
+	public void setCombo(Event event) {
+		//System.out.println(date.getDate()+" "+date.getMonth()+" "+(date.getYear()+1900)+" "+date.getHours()+" "+date.getMinutes());
+		Date date = event.getDate();
+		dCom.setSelectedItem(date.getDate());
+		mCom.setSelectedItem(date.getMonth());
+		yCom.setSelectedItem(date.getYear()+1900);
+		hourCom.setSelectedItem(date.getHours());
+		minCom.setSelectedItem(date.getMinutes());
+		text.setText(event.getDetail());
+	}
+	
 	public String getInputText() {
 		return text.getText();
 	}
@@ -131,5 +145,4 @@ public class DetailView extends JFrame {
 	public JButton getDelButton() {
 		return delButton;
 	}
-
 }
