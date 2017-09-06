@@ -3,8 +3,7 @@ package se.lab.calendar;
 import controllers.MainController;
 
 /**
- * Hello world!
- *
+ * Warit Siasakul  5810405339
  */
 public class App 
 {

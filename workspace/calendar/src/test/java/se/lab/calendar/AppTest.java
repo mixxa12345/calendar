@@ -5,6 +5,10 @@ import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
 /**
+ * Warit Siasakul  5810405339
+ */
+
+/**
  * Unit test for simple App.
  */
 public class AppTest 
