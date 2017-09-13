@@ -11,7 +11,7 @@ import javax.swing.UIManager;
 
 
 public class MainView extends JFrame {
-	private int frameWidth = 340;
+	private int frameWidth = 1000;
 	private int frameHeight = 800;
 	private MenuPanel menu;
 	public MainView() {

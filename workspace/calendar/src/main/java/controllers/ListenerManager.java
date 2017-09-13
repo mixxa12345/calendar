@@ -34,9 +34,14 @@ public class ListenerManager {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
+					if (frame.getMenu().getDView().getId() > -1) {
+						int id = frame.getMenu().getDView().getId();
+						Event event = frame.getMenu().removeEvent(id);
+						DBC.delDB(DBC.loadDB(), event);
+						frame.getMenu().getDView().setId(-1);
+					}
 					Event ev = frame.getMenu().addEventPanel();
 					DBC.insertDB(DBC.loadDB(), ev);
-					
 				} catch (ParseException e) {
 					//e.printStackTrace();
 				}
@@ -48,6 +53,7 @@ public class ListenerManager {
 		frame.getMenu().getDView().getDelButton().addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				frame.getMenu().getDView().setId(-1);
 				frame.getMenu().getDView().setVisible(false);
 			}
 		});

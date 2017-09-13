@@ -28,6 +28,11 @@ public class CalendarTest extends TestCase {
 		event3.setId(2);
 		event4.setId(3);
 		
+		event1.setRepeater("-");
+		event2.setRepeater("d");
+		event3.setRepeater("m");
+		event4.setRepeater("y");
+		
 		events.add(event1);
 		events.add(event2);
 		events.add(event3);
@@ -57,6 +62,11 @@ public class CalendarTest extends TestCase {
 		assertEquals("22Aug201716:30", event2.getDateFormat());
 		assertEquals("1Jan201722:0", event3.getDateFormat());
 		assertEquals("30Dec20177:0", event4.getDateFormat());
+		
+		assertEquals("-", event1.getRepeater());
+		assertEquals("d", event2.getRepeater());
+		assertEquals("m", event3.getRepeater());
+		assertEquals("y", event4.getRepeater());
 		
 		assertTrue(0 == event1.getId());
 		assertTrue(1 == event2.getId());

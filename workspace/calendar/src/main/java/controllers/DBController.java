@@ -45,11 +45,12 @@ public class DBController {
 	public void insertDB(Connection conn ,Event event) {
 		try {
 			if (conn != null) {
-				String query = "INSERT INTO EVENT (id, date, detail) VALUES(?,?,?)";
+				String query = "INSERT INTO EVENT (id, date, detail, repeater) VALUES(?,?,?,?)";
 				PreparedStatement statement = conn.prepareStatement(query);
 		        statement.setInt(1,event.getId());
 		        statement.setString(2,event.getDateFormat());
 		        statement.setString(3,event.getDetail());
+		        statement.setString(4,event.getRepeater());
 		        statement.executeUpdate();
 				conn.close();
 			}
@@ -81,9 +82,11 @@ public class DBController {
 					int id = resultSet.getInt(1);
 					String date = resultSet.getString(2);
 					String detail = resultSet.getString(3);
+					String repeater = resultSet.getString(4);
 					Event ev = new Event(date, detail);
 					ev.setId(id);
-					System.out.println(id + date + detail);
+					ev.setRepeater(repeater);
+					System.out.println(id + date + detail + repeater);
 					list.add(ev);
 				}
 				conn.close();

@@ -1,4 +1,5 @@
 package views;
+
 /**
  * Warit Siasakul  5810405339
  */
@@ -38,15 +39,16 @@ public class MenuPanel extends JPanel {
 
 	private DetailView dView = new DetailView();
 	ArrayList<Event> calendar = new ArrayList<>();
-	private EditController editor;
+	private EditController editor = new EditController(dView, calendar);
+	private ExtendView exView = new ExtendView(calendar, editor);
 
 	public MenuPanel() {
-		editor = new EditController(dView, calendar);
 		dView.initFrame();
 		eventFlow.setLayout(new BoxLayout(eventFlow, BoxLayout.Y_AXIS));
 		eventFlow.setBackground(Color.BLACK);
-		midder = (JPanel) CreateMidMenu();
-		this.add(CreateTopMenu(), BorderLayout.NORTH);
+		// midder = (JPanel) CreateMidMenu();
+		this.add(CreateTopMenu(), BorderLayout.EAST);
+		this.add(exView, BorderLayout.WEST);
 		this.setBackground(c);
 	}
 
@@ -93,9 +95,11 @@ public class MenuPanel extends JPanel {
 
 	public Event addEventPanel() throws ParseException {
 		eventFlow.removeAll();
+		exView.getEventFlow().removeAll();
 		Event ev = new Event(dView.getComboResult(), dView.getInputText());
-		if (calendar.size()>0) {
-			ev.setId(calendar.get(calendar.size()-1).getId()+1);
+		ev.setRepeater(dView.getRepeater());
+		if (calendar.size() > 0) {
+			ev.setId(calendar.get(calendar.size() - 1).getId() + 1);
 		}
 		calendar.add(ev);
 		calendarToPanel();
@@ -119,9 +123,28 @@ public class MenuPanel extends JPanel {
 		});
 		for (int i = 0; i < viewList.size(); i++) {
 			Event current = viewList.get(i);
-			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(), editor);
-			eventFlow.add(ev);
+			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
+					editor);
+			if (current.getRepeater().equals("-")) {
+				System.out.println("IN");
+				eventFlow.add(ev);
+			} else {
+				exView.estimate(ev, current.getRepeater());
+				System.out.println("IN2");
+			}
+
 		}
+	}
+
+	public Event removeEvent(int id) {
+		for (Event event : calendar) {
+			if (event.getId() == id) {
+				// System.out.println("CLEAR");
+				calendar.remove(event);
+				return event;
+			}
+		}
+		return null;
 	}
 
 	public ArrayList<Event> getCalendar() {
@@ -134,7 +157,6 @@ public class MenuPanel extends JPanel {
 
 	public void setDBOnEditor(DBController DBC) {
 		editor.setDBC(DBC);
-		;
 	}
 
 	public DetailView getDView() {

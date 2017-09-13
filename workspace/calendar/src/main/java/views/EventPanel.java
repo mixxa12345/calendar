@@ -26,16 +26,17 @@ public class EventPanel extends JPanel {
 	private JButton xButton = new JButton("X");
 	private JButton modButton = new JButton(" O ");
 	private int id;
-	private EditController editor;
+	private JPanel header;
+	JTextArea text = new JTextArea();
 
 	public EventPanel(String s, String d, int iid, EditController Editor) {
-		this.editor = Editor;
 		this.id = iid;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new LineBorder(Color.BLACK, 3));
 		dateHead.setFont(new Font("Arial Black", Font.PLAIN, 12));
 		dateHead.setText(s);
-		this.add(createHeader());
+		header = createHeader();
+		this.add(header);
 		createDateDetail(d);
 		
 		xButton.addActionListener(new ActionListener() {
@@ -58,19 +59,19 @@ public class EventPanel extends JPanel {
 		this.revalidate();
 	}
 	
-	public JComponent createHeader() {
+	public JPanel createHeader() {
 		JPanel inner = new JPanel();
 		inner.setLayout(new BoxLayout(inner, BoxLayout.X_AXIS));
-		inner.add(dateHead);
-		inner.add(Box.createRigidArea(new Dimension(75, 10)));
 		inner.add(xButton);
 		inner.add(modButton);
+		inner.add(Box.createRigidArea(new Dimension(65, 10)));
+		inner.add(dateHead);
 		return inner;
 	}
 	
 	public JComponent createDateDetail(String d) {
 		JPanel inner = new JPanel();
-		JTextArea text = new JTextArea(d);
+		text.setText(d);
 		text.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		text.setEditable(false);
 		JScrollPane areaScrollPane = new JScrollPane(text);
@@ -83,7 +84,20 @@ public class EventPanel extends JPanel {
 		return id;
 	}
 	
+	public JPanel getHeader() {
+		return header;
+	}
+	
 	public JButton getXButton() {
 		return xButton;
 	}
+
+	public JTextArea getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text.setText(text);
+	}
+	
 }

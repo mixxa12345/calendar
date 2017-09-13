@@ -34,6 +34,7 @@ public class EditController {
 
 	public void acceptModify(int id) {
 		dView.setCombo(list.get(id));
+		dView.setId(id);
 		dView.setVisible(true);
 	}
 

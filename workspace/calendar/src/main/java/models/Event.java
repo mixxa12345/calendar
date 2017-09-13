@@ -11,6 +11,7 @@ public class Event {
 	private String detail;
 	private int id;
 	private String dateFormat;
+	private String repeater = "-"; 
 	
 	public Event(String s, String dt) throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat("ddMMMyyyyh:mm");
@@ -24,6 +25,14 @@ public class Event {
 		
 	}
 	
+	public String getRepeater() {
+		return repeater;
+	}
+	
+	public void setRepeater(String repeater) {
+		this.repeater = repeater;
+	}
+
 	public int getId() {
 		return id;
 	}
