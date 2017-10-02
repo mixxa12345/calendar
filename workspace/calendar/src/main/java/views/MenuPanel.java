@@ -126,11 +126,11 @@ public class MenuPanel extends JPanel {
 			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
 					editor);
 			if (current.getRepeater().equals("-")) {
-				System.out.println("IN");
+				System.out.println("toView1");
 				eventFlow.add(ev);
 			} else {
 				exView.estimate(ev, current.getRepeater());
-				System.out.println("IN2");
+				System.out.println("toView2");
 			}
 
 		}

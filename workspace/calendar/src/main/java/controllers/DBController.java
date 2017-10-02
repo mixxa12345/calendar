@@ -1,4 +1,5 @@
 package controllers;
+
 /**
  * Warit Siasakul  5810405339
  */
@@ -20,20 +21,8 @@ public class DBController {
 			Class.forName("org.sqlite.JDBC");
 			String dbURL = "jdbc:sqlite:data.db";
 			Connection conn = DriverManager.getConnection(dbURL);
-			if (conn != null) {
-				/*
-				 * DatabaseMetaData dm = (DatabaseMetaData) conn.getMetaData();
-				 * System.out.println("Connected to the database");
-				 * System.out.println("Driver name: " + dm.getDriverName());
-				 * System.out.println("Driver version: " +
-				 * dm.getDriverVersion()); System.out.println("Product name: " +
-				 * dm.getDatabaseProductName());
-				 * System.out.println("Product version: " +
-				 * dm.getDatabaseProductVersion());
-				 */
-				return conn;
-			}
 
+			return conn;
 		} catch (ClassNotFoundException ex) {
 			ex.printStackTrace();
 		} catch (SQLException ex) {
@@ -41,25 +30,32 @@ public class DBController {
 		}
 		return null;
 	}
-	
-	public void insertDB(Connection conn ,Event event) {
+
+	public void createDB(Connection conn) throws SQLException {
+		String query = "CREATE TABLE 'event' ( `id` INTEGER, `date` TEXT, `detail` TEXT, `repeater` TEXT )";
+		PreparedStatement statement = conn.prepareStatement(query);
+		statement.executeUpdate();
+		System.out.println("createDB");
+	}
+
+	public void insertDB(Connection conn, Event event) {
 		try {
 			if (conn != null) {
 				String query = "INSERT INTO EVENT (id, date, detail, repeater) VALUES(?,?,?,?)";
 				PreparedStatement statement = conn.prepareStatement(query);
-		        statement.setInt(1,event.getId());
-		        statement.setString(2,event.getDateFormat());
-		        statement.setString(3,event.getDetail());
-		        statement.setString(4,event.getRepeater());
-		        statement.executeUpdate();
+				statement.setInt(1, event.getId());
+				statement.setString(2, event.getDateFormat());
+				statement.setString(3, event.getDetail());
+				statement.setString(4, event.getRepeater());
+				statement.executeUpdate();
 				conn.close();
 			}
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
 	}
-	
-	public void delDB(Connection conn ,Event event) {
+
+	public void delDB(Connection conn, Event event) {
 		try {
 			if (conn != null) {
 				String query = "DELETE FROM EVENT WHERE id = ?";
@@ -72,8 +68,8 @@ public class DBController {
 			ex.printStackTrace();
 		}
 	}
-	
-	public void getDB(Connection conn ,ArrayList<Event> list) throws ParseException {
+
+	public void getDB(Connection conn, ArrayList<Event> list) throws ParseException {
 		try {
 			if (conn != null) {
 				Statement statement = conn.createStatement();
