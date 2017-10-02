@@ -55,7 +55,7 @@ public class SendMailTLS {
             MimeMultipart multipart = new MimeMultipart();
             multipart.addBodyPart(messageBodyPart);
             message.setContent(multipart);
-
+            //
             //waiting for Done
             Transport.send(message);
 
