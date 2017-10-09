@@ -79,7 +79,17 @@ public class EventPanel extends JPanel {
 		this.add(areaScrollPane);
 		return inner;
 	}
-
+	
+	public EventPanel mod(EventPanel panel, String s) {
+		EventPanel npanel = panel;
+		JLabel label = new JLabel(s + "      ");
+		label.setForeground(Color.BLACK);
+		label.setFont(new Font("Arial Black", Font.PLAIN, 15));
+		npanel.getHeader().add(Box.createRigidArea(new Dimension(220, 10)));
+		npanel.getHeader().add(label);
+		return npanel;
+	}
+	
 	public int sendSignal() {
 		return id;
 	}

@@ -29,6 +29,14 @@ public class ListenerManager {
 			}
 		});
 		
+		frame.getMenu().getSearchButton().addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				frame.getMenu().getSchView().setVisible(true);
+				frame.getMenu().getSchView().pack();
+			}
+		});
+		
 		//add
 		frame.getMenu().getDView().getSubButton().addActionListener(new ActionListener() {
 			@Override

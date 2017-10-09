@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 
@@ -37,7 +39,13 @@ public class MainView extends JFrame {
 		setVisible(true);
 	}
 
-	
+	public static void displayEmpty(JPanel eventFlow) {
+		JTextField jf = new JTextField("No Event");
+		jf.setFont(new Font("Arial Black", Font.BOLD, 14));
+		jf.setHorizontalAlignment(JTextField.CENTER);
+		jf.setEditable(false);
+		eventFlow.add(jf);
+	}
 	
 	public MenuPanel getMenu() {
 		return menu;

@@ -21,6 +21,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 import controllers.DBController;
 import controllers.EditController;
@@ -28,25 +29,20 @@ import models.Event;
 
 public class MenuPanel extends JPanel {
 	private Color c = new Color(0, 0, 0);
-	private JPanel header = new JPanel();
-	private JPanel midder;
 	private JPanel eventFlow = new JPanel();
-	private JButton createButton = new JButton("Create");
+	private JButton createButton = new JButton("Create..");
+	private JButton searchButton = new JButton("Search..");
 	private JButton dayButton = new JButton("  Day  ");
-	private JButton weekButton = new JButton("Week");
-	private JButton monthButton = new JButton("Month");
-	private JButton allButton = new JButton("   All   ");
-
 	private DetailView dView = new DetailView();
 	ArrayList<Event> calendar = new ArrayList<>();
-	private EditController editor = new EditController(dView, calendar);
+	private EditController editor = new EditController(dView, calendar, this);
 	private ExtendView exView = new ExtendView(calendar, editor);
+	private SearchView schView = new SearchView(calendar, editor);
 
 	public MenuPanel() {
 		dView.initFrame();
 		eventFlow.setLayout(new BoxLayout(eventFlow, BoxLayout.Y_AXIS));
 		eventFlow.setBackground(Color.BLACK);
-		// midder = (JPanel) CreateMidMenu();
 		this.add(CreateTopMenu(), BorderLayout.EAST);
 		this.add(exView, BorderLayout.WEST);
 		this.setBackground(c);
@@ -61,35 +57,28 @@ public class MenuPanel extends JPanel {
 		head.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		head.setBackground(c);
 		head.setOpaque(true);
+		
+		searchButton.setPreferredSize(new Dimension(100, 20));
+		searchButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
 		createButton.setPreferredSize(new Dimension(100, 50));
 		createButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
-		// createButton.setBorder(new EmptyBorder(0, 0, 0, 0));
 
 		JPanel inn = new JPanel();
 		inn.setBackground(c);
 		inn.setLayout(new FlowLayout(FlowLayout.RIGHT));
 		inn.add(head);
-		inn.add(Box.createRigidArea(new Dimension(30, 10)));
+		inn.add(Box.createRigidArea(new Dimension(35, 10)));
+		inn.add(searchButton);
 		inn.add(createButton);
 
 		inner.add(inn, BorderLayout.NORTH);
-		inner.add(Box.createRigidArea(new Dimension(10, 15)));
+		inner.add(searchButton);
+		
 
 		JScrollPane EScroll = new JScrollPane(eventFlow);
-		EScroll.setPreferredSize(new Dimension(325, 680));
+		EScroll.setPreferredSize(new Dimension(330, 680));
 		inner.add(EScroll, BorderLayout.SOUTH);
 
-		return inner;
-	}
-
-	private JComponent CreateMidMenu() {
-		JPanel inner = new JPanel();
-		inner.setBackground(Color.WHITE);
-		inner.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		inner.add(dayButton);
-		inner.add(weekButton);
-		inner.add(monthButton);
-		inner.add(allButton);
 		return inner;
 	}
 
@@ -107,35 +96,30 @@ public class MenuPanel extends JPanel {
 	}
 
 	public void calendarToPanel() {
-		ArrayList<Event> viewList = calendar;
-		Collections.sort(viewList, new Comparator<Event>() {
-			@Override
-			public int compare(Event o1, Event o2) {
-				Date oo1 = o1.getDate();
-				Date oo2 = o2.getDate();
-				if (oo1.getTime() < oo2.getTime())
-					return -1;
-				else if (oo1.getTime() == oo2.getTime())
-					return 0;
-				else
-					return 1;
-			}
-		});
+		if (calendar.size() == 0) {
+			MainView.displayEmpty(getEventFlow());
+			return;
+		}
+		System.out.println("SIZE is " + calendar.size());
+		ArrayList<Event> viewList = EditController.sortArrayList(calendar);
 		for (int i = 0; i < viewList.size(); i++) {
 			Event current = viewList.get(i);
 			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
 					editor);
 			if (current.getRepeater().equals("-")) {
 				System.out.println("toView1");
+				//add to view1
 				eventFlow.add(ev);
 			} else {
-				exView.estimate(ev, current.getRepeater());
+				//add to view2
+				//exView.estimate(ev, current.getRepeater());
+				exView.stateAction();
 				System.out.println("toView2");
 			}
 
 		}
 	}
-
+	
 	public Event removeEvent(int id) {
 		for (Event event : calendar) {
 			if (event.getId() == id) {
@@ -146,7 +130,7 @@ public class MenuPanel extends JPanel {
 		}
 		return null;
 	}
-
+	
 	public ArrayList<Event> getCalendar() {
 		return calendar;
 	}
@@ -162,6 +146,14 @@ public class MenuPanel extends JPanel {
 	public DetailView getDView() {
 		return dView;
 	}
+	
+	public ExtendView getExView() {
+		return exView;
+	}
+	
+	public SearchView getSchView() {
+		return schView;
+	}
 
 	public JButton getDayButton() {
 		return dayButton;
@@ -169,5 +161,9 @@ public class MenuPanel extends JPanel {
 
 	public JButton getCreateButton() {
 		return createButton;
+	}
+	
+	public JButton getSearchButton() {
+		return searchButton;
 	}
 }

@@ -21,6 +21,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.SwingConstants;
 
 import models.Event;
 
@@ -39,23 +40,20 @@ public class DetailView extends JFrame {
 
 	private String[] hour = new String[24];
 	private String[] min = new String[60];
-	private String[] day1 = new String[31];
+	private String[] day = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
+			"17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31" };
 	private String[] month = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 	private String[] year = { "2020", "2019", "2018", "2017", "2016", "2015", "2014", "2013", "2012", "2011", "2010" };
 
 	private JComboBox hourCom;
 	private JComboBox minCom;
-	private JComboBox dCom;
+	private JComboBox dCom = new JComboBox(day);;
 	private JComboBox mCom = new JComboBox(month);
 	private JComboBox yCom = new JComboBox(year);
 
 	private ButtonGroup repeater = new ButtonGroup();
 
 	public void initFrame() {
-		for (int i = 0; i < 31; i++) {
-			day1[i] = Integer.toString(i + 1);
-		}
-		dCom = new JComboBox(day1);
 		for (int i = 0; i < 24; i++) {
 			hour[i] = Integer.toString(i);
 		}
@@ -65,6 +63,12 @@ public class DetailView extends JFrame {
 		}
 		minCom = new JComboBox(min);
 		yCom.setSelectedIndex(3);
+		
+		((JLabel)minCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		((JLabel)hourCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		((JLabel)dCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		((JLabel)mCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
+		((JLabel)yCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 
 		dateHead.setFont(new Font("Arial Black", Font.PLAIN, 20));
 		timeMid.setFont(new Font("Arial Black", Font.PLAIN, 17));

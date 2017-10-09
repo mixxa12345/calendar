@@ -11,21 +11,26 @@ public class MainController {
 	public void startApplication(){
 		MainView frame = new MainView();
 		DBController DBC = new DBController();
+
 		
+		ListenerManager listener = new ListenerManager(frame, DBC);
+		listener.initListener();
+		
+		//load from DB
 		try {
 			try {
 				DBC.createDB(DBC.loadDB());
 			} catch(SQLException e) {
-				System.out.println("create fail");
+				System.out.println("sth. fail");
 			}
 			DBC.getDB(DBC.loadDB(), frame.getMenu().getCalendar());
 			frame.getMenu().calendarToPanel();
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
+		
+		//init main frame
 		frame.initFrame();
-		ListenerManager listener = new ListenerManager(frame, DBC);
-		listener.initListener();
 	}
 
 }
