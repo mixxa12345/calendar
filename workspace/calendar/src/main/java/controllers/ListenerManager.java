@@ -53,6 +53,7 @@ public class ListenerManager {
 				} catch (ParseException e) {
 					//e.printStackTrace();
 				}
+				frame.getMenu().getEditor().refresh();
 				frame.pack();
 				frame.getMenu().getDView().setVisible(false);
 			}

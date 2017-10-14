@@ -96,10 +96,22 @@ public class MenuPanel extends JPanel {
 	}
 
 	public void calendarToPanel() {
-		if (calendar.size() == 0) {
-			MainView.displayEmpty(getEventFlow());
-			return;
+		//check event#
+		int normalCount = 0,repeatCount = 0;
+		for (Event ev : calendar) {
+			if (ev.getRepeater().equals("-")) {
+				normalCount++;
+			} else {
+				repeatCount++;
+			}
 		}
+		if (normalCount == 0) {
+			MainView.displayEmpty(getEventFlow());
+			if (repeatCount == 0) {
+				return;
+			}
+		} 
+		
 		System.out.println("SIZE is " + calendar.size());
 		ArrayList<Event> viewList = EditController.sortArrayList(calendar);
 		for (int i = 0; i < viewList.size(); i++) {
@@ -112,7 +124,6 @@ public class MenuPanel extends JPanel {
 				eventFlow.add(ev);
 			} else {
 				//add to view2
-				//exView.estimate(ev, current.getRepeater());
 				exView.stateAction();
 				System.out.println("toView2");
 			}
@@ -131,6 +142,10 @@ public class MenuPanel extends JPanel {
 		return null;
 	}
 	
+	public EditController getEditor() {
+		return editor;
+	}
+
 	public ArrayList<Event> getCalendar() {
 		return calendar;
 	}

@@ -38,7 +38,13 @@ public class EditController {
 	}
 
 	public void acceptModify(int id) {
-		dView.setCombo(list.get(id));
+		Event target = null;
+		for (Event ev : list) {
+			if (ev.getId() == id) {
+				target = ev;
+			}
+		}
+		dView.setCombo(target);
 		dView.setId(id);
 		dView.setVisible(true);
 		refresh();
@@ -49,10 +55,17 @@ public class EditController {
 	}
 
 	public void refresh() {
+		//force update to all view
+		//1
 		menu.getEventFlow().removeAll();
 		menu.calendarToPanel();
-		menu.getEventFlow().revalidate();
-		menu.getSchView().getEventFlow().revalidate();
+		//2
+		menu.getExView().stateAction();
+		//3
+		if (menu.getSchView().isVisible()) {
+			menu.getSchView().changeSerach();
+		}
+		
 	}
 
 	public static ArrayList<Event> sortArrayList(ArrayList<Event> list) {

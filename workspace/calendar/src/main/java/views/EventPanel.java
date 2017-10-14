@@ -42,8 +42,9 @@ public class EventPanel extends JPanel {
 		xButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				Editor.acceptDelete(id);
 				del();
+				Editor.acceptDelete(id);
+				
 			}
 		});
 		modButton.addActionListener(new ActionListener() {
@@ -80,14 +81,13 @@ public class EventPanel extends JPanel {
 		return inner;
 	}
 	
-	public EventPanel mod(EventPanel panel, String s) {
-		EventPanel npanel = panel;
+	public EventPanel mod(String s) {
 		JLabel label = new JLabel(s + "      ");
 		label.setForeground(Color.BLACK);
 		label.setFont(new Font("Arial Black", Font.PLAIN, 15));
-		npanel.getHeader().add(Box.createRigidArea(new Dimension(220, 10)));
-		npanel.getHeader().add(label);
-		return npanel;
+		getHeader().add(Box.createRigidArea(new Dimension(220, 10)));
+		getHeader().add(label);
+		return this;
 	}
 	
 	public int sendSignal() {
