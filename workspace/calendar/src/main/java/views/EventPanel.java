@@ -28,8 +28,11 @@ public class EventPanel extends JPanel {
 	private int id;
 	private JPanel header;
 	JTextArea text = new JTextArea();
+	private EditController editor;
 
-	public EventPanel(String s, String d, int iid, EditController Editor) {
+	public EventPanel(String s, String d, int iid, EditController editor) {
+		this.editor = editor;
+		final EditController Editor = editor;
 		this.id = iid;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new LineBorder(Color.BLACK, 3));
@@ -40,7 +43,6 @@ public class EventPanel extends JPanel {
 		createDateDetail(d);
 		
 		xButton.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				del();
 				Editor.acceptDelete(id);
@@ -48,7 +50,6 @@ public class EventPanel extends JPanel {
 			}
 		});
 		modButton.addActionListener(new ActionListener() {
-			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				Editor.acceptModify(id);
 			}

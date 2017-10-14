@@ -26,7 +26,6 @@ import javax.swing.JTextField;
 import controllers.DBController;
 import controllers.EditController;
 import models.Event;
-
 public class MenuPanel extends JPanel {
 	private Color c = new Color(0, 0, 0);
 	private JPanel eventFlow = new JPanel();
