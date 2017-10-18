@@ -1,5 +1,7 @@
 package views;
-
+/**
+ * Warit Siasakul  5810405339
+ */
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -49,7 +51,6 @@ public class ExtendView extends JPanel {
 	}
 
 	public void stateAction() {
-		System.out.println("StateAct");
 		buttons[state].setBackground(Color.WHITE);
 		for (JButton button : buttons) {
 			if (buttons[state] != button) {

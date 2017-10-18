@@ -1,8 +1,7 @@
-package controllers;
-
 /**
  * Warit Siasakul  5810405339
  */
+package controllers;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
@@ -14,6 +13,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import models.Event;
+import views.MainView;
 
 public class DBController {
 	public Connection loadDB() {
@@ -91,4 +91,21 @@ public class DBController {
 			ex.printStackTrace();
 		}
 	}
+
+	public void loadDBtoMainView(MainView frame){
+		try {
+			this.createDB(this.loadDB());
+		} catch(SQLException e) {
+			//not found DB or something ,but don't affect program work
+		} finally {
+			try {
+				this.getDB(this.loadDB(), frame.getMenu().getCalendar());
+			} catch (ParseException e) {
+				//normally not go to this
+				e.printStackTrace();
+			}
+			frame.getMenu().calendarToPanel();
+		}
+	}
+
 }

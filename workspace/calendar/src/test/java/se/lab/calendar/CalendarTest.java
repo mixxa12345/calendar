@@ -32,7 +32,7 @@ public class CalendarTest extends TestCase {
 		event2.setRepeater("d");
 		event3.setRepeater("m");
 		event4.setRepeater("y");
-		
+
 		events.add(event1);
 		events.add(event2);
 		events.add(event3);

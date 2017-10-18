@@ -1,7 +1,7 @@
-package models;
 /**
  * Warit Siasakul  5810405339
  */
+package models;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;

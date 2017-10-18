@@ -1,5 +1,4 @@
 package views;
-
 /**
  * Warit Siasakul  5810405339
  */
@@ -110,21 +109,18 @@ public class MenuPanel extends JPanel {
 				return;
 			}
 		} 
-		
-		System.out.println("SIZE is " + calendar.size());
+
 		ArrayList<Event> viewList = EditController.sortArrayList(calendar);
 		for (int i = 0; i < viewList.size(); i++) {
 			Event current = viewList.get(i);
 			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
 					editor);
 			if (current.getRepeater().equals("-")) {
-				System.out.println("toView1");
 				//add to view1
 				eventFlow.add(ev);
 			} else {
 				//add to view2
 				exView.stateAction();
-				System.out.println("toView2");
 			}
 
 		}

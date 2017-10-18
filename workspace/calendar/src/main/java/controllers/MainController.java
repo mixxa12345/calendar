@@ -1,3 +1,6 @@
+/**
+ * Warit Siasakul  5810405339
+ */
 package controllers;
 import java.sql.SQLException;
 /**
@@ -12,23 +15,12 @@ public class MainController {
 		MainView frame = new MainView();
 		DBController DBC = new DBController();
 
-		
 		ListenerManager listener = new ListenerManager(frame, DBC);
 		listener.initListener();
 		
 		//load from DB
-		try {
-			try {
-				DBC.createDB(DBC.loadDB());
-			} catch(SQLException e) {
-				System.out.println("sth. fail");
-			}
-			DBC.getDB(DBC.loadDB(), frame.getMenu().getCalendar());
-			frame.getMenu().calendarToPanel();
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
-		
+		DBC.loadDBtoMainView(frame);
+
 		//init main frame
 		frame.initFrame();
 	}
