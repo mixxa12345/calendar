@@ -83,26 +83,26 @@ public class CalendarTest extends TestCase {
 	@Test
 	public void testDBConnection() throws ParseException {
 		
-		DBC.insertDB(DBC.loadDB(), event1);
-		DBC.insertDB(DBC.loadDB(), event2);
-		DBC.insertDB(DBC.loadDB(), event3);
-		DBC.insertDB(DBC.loadDB(), event4);
+		DBC.insertDB(event1);
+		DBC.insertDB(event2);
+		DBC.insertDB(event3);
+		DBC.insertDB(event4);
 		
 		ArrayList<Event> testList1 = new ArrayList<Event>();
-		DBC.getDB(DBC.loadDB(), testList1);
+		DBC.getDB(testList1);
 		assertEquals(events.size(), testList1.size());
 		assertEquals(events.get(0).toString(), testList1.get(0).toString());
 		assertEquals(events.get(1).toString(), testList1.get(1).toString());
 		assertEquals(events.get(2).toString(), testList1.get(2).toString());
 		assertEquals(events.get(3).toString(), testList1.get(3).toString());
 		
-		DBC.delDB(DBC.loadDB(), event1);
-		DBC.delDB(DBC.loadDB(), event2);
-		DBC.delDB(DBC.loadDB(), event3);
-		DBC.delDB(DBC.loadDB(), event4);
+		DBC.delDB(event1);
+		DBC.delDB(event2);
+		DBC.delDB(event3);
+		DBC.delDB(event4);
 		
 		ArrayList<Event> testList2 = new ArrayList<Event>();
-		DBC.getDB(DBC.loadDB(), testList2);
+		DBC.getDB(testList2);
 		assertTrue(0 == testList2.size());
 		
 	}

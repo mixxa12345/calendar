@@ -31,14 +31,16 @@ public class DBController {
 		return null;
 	}
 
-	public void createDB(Connection conn) throws SQLException {
+	public void createDB() throws SQLException {
+		Connection conn = reconnect();
 		String query = "CREATE TABLE 'event' ( `id` INTEGER, `date` TEXT, `detail` TEXT, `repeater` TEXT )";
 		PreparedStatement statement = conn.prepareStatement(query);
 		statement.executeUpdate();
 		System.out.println("createDB");
 	}
 
-	public void insertDB(Connection conn, Event event) {
+	public void insertDB(Event event) {
+		Connection conn = reconnect();
 		try {
 			if (conn != null) {
 				String query = "INSERT INTO EVENT (id, date, detail, repeater) VALUES(?,?,?,?)";
@@ -55,7 +57,8 @@ public class DBController {
 		}
 	}
 
-	public void delDB(Connection conn, Event event) {
+	public void delDB(Event event) {
+		Connection conn = reconnect();
 		try {
 			if (conn != null) {
 				String query = "DELETE FROM EVENT WHERE id = ?";
@@ -69,7 +72,8 @@ public class DBController {
 		}
 	}
 
-	public void getDB(Connection conn, ArrayList<Event> list) throws ParseException {
+	public void getDB(ArrayList<Event> list) throws ParseException {
+		Connection conn = reconnect();
 		try {
 			if (conn != null) {
 				Statement statement = conn.createStatement();
@@ -94,18 +98,22 @@ public class DBController {
 
 	public void loadDBtoMainView(MainView frame){
 		try {
-			this.createDB(this.loadDB());
+			this.createDB();
 		} catch(SQLException e) {
 			//not found DB or something ,but don't affect program work
 		} finally {
 			try {
-				this.getDB(this.loadDB(), frame.getMenu().getCalendar());
+				this.getDB(frame.getMenu().getCalendar());
 			} catch (ParseException e) {
 				//normally not go to this
 				e.printStackTrace();
 			}
 			frame.getMenu().calendarToPanel();
 		}
+	}
+
+	private Connection reconnect(){
+		return loadDB();
 	}
 
 }

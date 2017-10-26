@@ -16,7 +16,7 @@ public class EditController {
 
 	private ArrayList<Event> list;
 	private DetailView dView;
-	private DBController DBC;
+	private DBController DBC; //act delete
 	private MenuPanel menu;
 
 	public EditController(DetailView dView, ArrayList<Event> list, MenuPanel menu) {
@@ -28,7 +28,7 @@ public class EditController {
 	public void acceptDelete(int id) {
 		for (Event event : list) {
 			if (event.getId() == id) {
-				DBC.delDB(DBC.loadDB(), event);
+				DBC.delDB(event);
 				list.remove(event);
 				refresh();
 				break;

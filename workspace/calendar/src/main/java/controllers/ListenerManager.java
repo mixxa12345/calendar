@@ -12,7 +12,7 @@ import views.MainView;
 
 public class ListenerManager {
 	private MainView frame;
-	private DBController DBC;
+	private DBController DBC; //act insert, delete
 
 	public ListenerManager(MainView frame, DBController DBC) {
 		this.frame = frame;
@@ -45,11 +45,11 @@ public class ListenerManager {
 					if (frame.getMenu().getDView().getId() > -1) {
 						int id = frame.getMenu().getDView().getId();
 						Event event = frame.getMenu().removeEvent(id);
-						DBC.delDB(DBC.loadDB(), event);
+						DBC.delDB(event);
 						frame.getMenu().getDView().setId(-1);
 					}
 					Event ev = frame.getMenu().addEventPanel();
-					DBC.insertDB(DBC.loadDB(), ev);
+					DBC.insertDB(ev);
 				} catch (ParseException e) {
 					//e.printStackTrace();
 				}
@@ -67,4 +67,5 @@ public class ListenerManager {
 			}
 		});
 	}
+
 }

@@ -8,21 +8,30 @@ import java.sql.SQLException;
  */
 import java.text.ParseException;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import views.MainView;
 
 public class MainController {
-	public void startApplication(){
-		MainView frame = new MainView();
-		DBController DBC = new DBController();
 
-		ListenerManager listener = new ListenerManager(frame, DBC);
+	MainView frame;
+	DBController DBC;
+	ListenerManager listener;
+
+	public void startApplication(){
+		ApplicationContext bf =
+				new ClassPathXmlApplicationContext("controller.xml");
+		DBC = (DBController) bf.getBean("dbc");
+		frame = (MainView) bf.getBean("frame");
+		listener = (ListenerManager) bf.getBean("listener");
+
+		//init listener
 		listener.initListener();
-		
 		//load from DB
 		DBC.loadDBtoMainView(frame);
-
 		//init main frame
 		frame.initFrame();
 	}
+
 
 }
