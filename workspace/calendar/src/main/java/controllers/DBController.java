@@ -3,7 +3,6 @@
  */
 package controllers;
 import java.sql.Connection;
-import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -13,18 +12,19 @@ import java.text.ParseException;
 import java.util.ArrayList;
 
 import models.Event;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceBuilder;
 import views.MainView;
+import views.MenuPanel;
+
+import javax.sql.DataSource;
 
 public class DBController {
+
 	public Connection loadDB() {
 		try {
-			Class.forName("org.sqlite.JDBC");
-			String dbURL = "jdbc:sqlite:data.db";
-			Connection conn = DriverManager.getConnection(dbURL);
-
+			Connection conn = DriverManager.getConnection("jdbc:sqlite:data.db");
 			return conn;
-		} catch (ClassNotFoundException ex) {
-			ex.printStackTrace();
+
 		} catch (SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -96,21 +96,23 @@ public class DBController {
 		}
 	}
 
-	public void loadDBtoMainView(MainView frame){
+	public void loadDBtoMainView(MenuPanel menu){
 		try {
 			this.createDB();
 		} catch(SQLException e) {
 			//not found DB or something ,but don't affect program work
 		} finally {
 			try {
-				this.getDB(frame.getMenu().getCalendar());
+				this.getDB(menu.getCalendar());
 			} catch (ParseException e) {
 				//normally not go to this
 				e.printStackTrace();
 			}
-			frame.getMenu().calendarToPanel();
+			menu.setDBOnEditor(this);
+			menu.calendarToPanel();
 		}
 	}
+
 
 	private Connection reconnect(){
 		return loadDB();

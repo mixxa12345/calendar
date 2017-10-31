@@ -9,9 +9,7 @@ import java.awt.FlowLayout;
 import java.awt.Font;
 import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,8 +18,8 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
+import common.ActionComponent;
 import controllers.DBController;
 import controllers.EditController;
 import models.Event;
@@ -30,12 +28,13 @@ public class MenuPanel extends JPanel {
 	private JPanel eventFlow = new JPanel();
 	private JButton createButton = new JButton("Create..");
 	private JButton searchButton = new JButton("Search..");
-	private JButton dayButton = new JButton("  Day  ");
 	private DetailView dView = new DetailView();
 	ArrayList<Event> calendar = new ArrayList<>();
-	private EditController editor = new EditController(dView, calendar, this);
+	private EditController editor = new EditController();
 	private ExtendView exView = new ExtendView(calendar, editor);
 	private SearchView schView = new SearchView(calendar, editor);
+
+	private ActionComponent actionComponent; // <-------- will replace EDITOR
 
 	public MenuPanel() {
 		dView.initFrame();
@@ -44,6 +43,36 @@ public class MenuPanel extends JPanel {
 		this.add(CreateTopMenu(), BorderLayout.EAST);
 		this.add(exView, BorderLayout.WEST);
 		this.setBackground(c);
+
+		exView.setParent(this);
+		exView.setParent(this);
+
+		editor.setEvents(calendar); // <----------------------------
+
+		createButton.addActionListener(arg -> {
+			dView.setVisible(true);
+		});
+		searchButton.addActionListener(arg ->{
+			schView.setVisible(true);
+		});
+
+		dView.getSubButton().addActionListener(arg0 -> {
+			try {
+				int id = dView.getId();
+				if (id > -1) {
+					editor.acceptDelete(this, id);
+					dView.setId(-1);
+				}
+				Event event = this.addEventPanel();
+				editor.acceptInsert(this, event);
+			} catch (ParseException e) {
+				//e.printStackTrace();
+			}
+
+			dView.setVisible(false);
+		});
+
+		refreshScene();
 	}
 
 	private JComponent CreateTopMenu() {
@@ -97,6 +126,7 @@ public class MenuPanel extends JPanel {
 		//check event#
 		int normalCount = 0,repeatCount = 0;
 		for (Event ev : calendar) {
+
 			if (ev.getRepeater().equals("-")) {
 				normalCount++;
 			} else {
@@ -110,11 +140,13 @@ public class MenuPanel extends JPanel {
 			}
 		} 
 
-		ArrayList<Event> viewList = EditController.sortArrayList(calendar);
+		ArrayList<Event> viewList = calendar;
+		viewList.sort(Comparator.comparing(Event::getDate));
 		for (int i = 0; i < viewList.size(); i++) {
 			Event current = viewList.get(i);
 			EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
 					editor);
+			ev.setParent(this);
 			if (current.getRepeater().equals("-")) {
 				//add to view1
 				eventFlow.add(ev);
@@ -125,20 +157,23 @@ public class MenuPanel extends JPanel {
 
 		}
 	}
-	
-	public Event removeEvent(int id) {
-		for (Event event : calendar) {
-			if (event.getId() == id) {
-				// System.out.println("CLEAR");
-				calendar.remove(event);
-				return event;
-			}
+
+	public void refreshScene() {
+		//force update to all view
+		//1
+		eventFlow.removeAll();
+		calendarToPanel();
+		//2
+		exView.stateAction();
+		//3
+		if (schView.isVisible()) {
+			schView.changeSearch();
 		}
-		return null;
+
 	}
-	
-	public EditController getEditor() {
-		return editor;
+
+	public DetailView getdView() {
+		return dView;
 	}
 
 	public ArrayList<Event> getCalendar() {
@@ -151,29 +186,9 @@ public class MenuPanel extends JPanel {
 
 	public void setDBOnEditor(DBController DBC) {
 		editor.setDBC(DBC);
-	}
-
-	public DetailView getDView() {
-		return dView;
-	}
-	
-	public ExtendView getExView() {
-		return exView;
-	}
-	
-	public SearchView getSchView() {
-		return schView;
-	}
-
-	public JButton getDayButton() {
-		return dayButton;
-	}
-
-	public JButton getCreateButton() {
-		return createButton;
-	}
-	
-	public JButton getSearchButton() {
-		return searchButton;
+	} /* will delete if separated Client/Server
+																			>> DB load to Editor in Server Side  */
+	public void setActionComponent(ActionComponent actionComponent) {
+		this.actionComponent = actionComponent;
 	}
 }

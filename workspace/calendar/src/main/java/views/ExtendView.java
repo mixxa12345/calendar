@@ -35,7 +35,8 @@ public class ExtendView extends JPanel {
 	private JButton yearButton = new JButton(" Yearly ");
 	private JButton[] buttons = { allButton, dayButton, weekButton, monthButton, yearButton };
 	ArrayList<Event> calendar;
-	ArrayList<EventPanel> ePanels = new ArrayList<EventPanel>();
+
+	private MenuPanel parent;
 
 	public ExtendView(ArrayList<Event> c, EditController editor) {
 		this.editor = editor;
@@ -47,7 +48,7 @@ public class ExtendView extends JPanel {
 		EScroll.setPreferredSize(new Dimension(640, 700));
 		this.add(CreateMidMenu());
 		this.add(EScroll);
-		stateAction();
+		//stateAction();
 	}
 
 	public void stateAction() {
@@ -62,8 +63,8 @@ public class ExtendView extends JPanel {
 		for (int i = 0; i < calendar.size(); i++) {
 			if (!calendar.get(i).getRepeater().equals("-")) {
 				Event ev = calendar.get(i);
-
 				EventPanel ep = new EventPanel(ev.getDate().toLocaleString(), ev.getDetail(), ev.getId(), editor);
+				ep.setParent(parent);
 				estimate(ep, calendar.get(i).getRepeater());
 			}
 		}
@@ -74,7 +75,6 @@ public class ExtendView extends JPanel {
 	}
 
 	public void estimate(EventPanel ep, String repeater) {
-
 		EventPanel epp = ep;
 		String[] states = { "-", "d", "w", "m", "y" };
 		String[] stateFulls = { "-", "Daily", "Weekly", "Monthly", "Yearly" };
@@ -139,4 +139,7 @@ public class ExtendView extends JPanel {
 		return eventFlow;
 	}
 
+	public void setParent(MenuPanel parent) {
+		this.parent = parent;
+	}
 }

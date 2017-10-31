@@ -10,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.Comparator;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -31,7 +32,6 @@ public class SearchView extends JFrame {
 	private ArrayList<Event> calendar;
 	private EditController editor;
 	private JPanel eventFlow = new JPanel();
-	// private JTextField tField = new JTextField("qwerty");
 	private JButton sButton = new JButton("   search   ");
 
 	private String[] day = { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16",
@@ -43,8 +43,11 @@ public class SearchView extends JFrame {
 	private JComboBox mCom = new JComboBox(month);
 	private JComboBox yCom = new JComboBox(year);
 
-	public SearchView(ArrayList<Event> c, EditController editor) {
-		calendar = c;
+	private MenuPanel parent;
+
+
+	public SearchView(ArrayList<Event> calendar, EditController editor) {
+		this.calendar = calendar;
 		this.editor = editor;
 
 		((JLabel) dCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
@@ -84,7 +87,8 @@ public class SearchView extends JFrame {
 	public void search(String d, String m, String y) {
 		int count = 0;
 		eventFlow.removeAll();
-		ArrayList<Event> viewList = EditController.sortArrayList(calendar);
+		ArrayList<Event> viewList = calendar;
+		viewList.sort(Comparator.comparing(Event::getDate));
 		for (int i = 0; i < viewList.size(); i++) {
 			Event current = viewList.get(i);
 			String cd = Integer.toString(current.getDate().getDate());
@@ -94,6 +98,7 @@ public class SearchView extends JFrame {
 				count++;
 				EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
 						editor);
+				ev.setParent(parent);
 				eventFlow.add(ev.mod(current.getRepeater()));
 			}
 		}
@@ -103,7 +108,7 @@ public class SearchView extends JFrame {
 		eventFlow.revalidate();
 	}
 
-	public void changeSerach() {
+	public void changeSearch() {
 		search((String) dCom.getSelectedItem(), (String) mCom.getSelectedItem(),
 				(String) yCom.getSelectedItem());
 	}
@@ -120,6 +125,10 @@ public class SearchView extends JFrame {
 
 	public JPanel getEventFlow() {
 		return eventFlow;
+	}
+
+	public void setParent(MenuPanel parent) {
+		this.parent = parent;
 	}
 
 }

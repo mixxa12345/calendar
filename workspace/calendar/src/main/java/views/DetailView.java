@@ -53,6 +53,13 @@ public class DetailView extends JFrame {
 
 	private ButtonGroup repeater = new ButtonGroup();
 
+	public DetailView() {
+		delButton.addActionListener(arg -> {
+			this.id = -1;
+			this.setVisible(false);
+		});
+	}
+
 	public void initFrame() {
 		for (int i = 0; i < 24; i++) {
 			hour[i] = Integer.toString(i);

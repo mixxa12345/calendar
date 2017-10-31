@@ -29,6 +29,7 @@ public class EventPanel extends JPanel {
 	private JPanel header;
 	JTextArea text = new JTextArea();
 	private EditController editor;
+	private MenuPanel parent;
 
 	public EventPanel(String s, String d, int iid, EditController editor) {
 		this.editor = editor;
@@ -45,13 +46,13 @@ public class EventPanel extends JPanel {
 		xButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				del();
-				Editor.acceptDelete(id);
+				Editor.acceptDelete(parent, id);
 				
 			}
 		});
 		modButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				Editor.acceptModify(id);
+				Editor.acceptModify(parent, id);
 			}
 		});
 	}
@@ -90,11 +91,11 @@ public class EventPanel extends JPanel {
 		getHeader().add(label);
 		return this;
 	}
-	
-	public int sendSignal() {
-		return id;
+
+	public void setParent(MenuPanel parent) {
+		this.parent = parent;
 	}
-	
+
 	public JPanel getHeader() {
 		return header;
 	}

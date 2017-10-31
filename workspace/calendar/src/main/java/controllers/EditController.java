@@ -9,80 +9,51 @@ import java.util.Date;
 
 import models.Event;
 import views.DetailView;
-import views.EventPanel;
 import views.MenuPanel;
 
 public class EditController {
 
-	private ArrayList<Event> list;
-	private DetailView dView;
-	private DBController DBC; //act delete
-	private MenuPanel menu;
+	private ArrayList<Event> events = new ArrayList<>();
+	private DBController DBC;
 
-	public EditController(DetailView dView, ArrayList<Event> list, MenuPanel menu) {
-		this.dView = dView;
-		this.list = list;
-		this.menu = menu;
-	}
-
-	public void acceptDelete(int id) {
-		for (Event event : list) {
+	public void acceptDelete(MenuPanel menu, int id) {
+		for (Event event : events) {
 			if (event.getId() == id) {
 				DBC.delDB(event);
-				list.remove(event);
-				refresh();
+				events.remove(event);
+				menu.refreshScene();
 				break;
 			}
 		}
 	}
 
-	public void acceptModify(int id) {
+	public void acceptModify(MenuPanel menu, int id) {
 		Event target = null;
-		for (Event ev : list) {
+		for (Event ev : events) {
 			if (ev.getId() == id) {
 				target = ev;
 			}
 		}
-		dView.setCombo(target);
-		dView.setId(id);
-		dView.setVisible(true);
-		refresh();
+		menu.getdView().setCombo(target);
+		menu.getdView().setId(id);
+		menu.getdView().setVisible(true);
+		menu.refreshScene();
+	}
+
+	public void acceptInsert(MenuPanel menu, Event event) {
+		DBC.insertDB(event);
+		menu.refreshScene();
 	}
 
 	public void setDBC(DBController DBC) {
 		this.DBC = DBC;
 	}
 
-	public void refresh() {
-		//force update to all view
-		//1
-		menu.getEventFlow().removeAll();
-		menu.calendarToPanel();
-		//2
-		menu.getExView().stateAction();
-		//3
-		if (menu.getSchView().isVisible()) {
-			menu.getSchView().changeSerach();
-		}
-		
+	public ArrayList<Event> getEvents() {
+		return events;
 	}
 
-	public static ArrayList<Event> sortArrayList(ArrayList<Event> list) {
-		ArrayList<Event> newList = list;
-		Collections.sort(newList, new Comparator<Event>() {
-			@Override
-			public int compare(Event o1, Event o2) {
-				Date oo1 = o1.getDate();
-				Date oo2 = o2.getDate();
-				if (oo1.getTime() < oo2.getTime())
-					return -1;
-				else if (oo1.getTime() == oo2.getTime())
-					return 0;
-				else
-					return 1;
-			}
-		});
-		return newList;
+	public void setEvents(ArrayList<Event> events) {
+		this.events = events;
 	}
-
 }

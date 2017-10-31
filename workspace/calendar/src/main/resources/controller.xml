@@ -6,12 +6,7 @@
     <bean id="dbc" class="controllers.DBController">
     </bean>
 
-    <bean id="frame" class="views.MainView">
-    </bean>
-
-    <bean id="listener" class="controllers.ListenerManager">
-        <constructor-arg index="0" ref="frame"/>
-        <constructor-arg index="1" ref="dbc"/>
+    <bean id="editor" class="controllers.EditController">
     </bean>
 
 </beans>
