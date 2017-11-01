@@ -1,18 +1,18 @@
 package common;
 
-import models.Event;
-import views.MainView;
-import views.MenuPanel;
+import common.models.Event;
+
 
 public interface ActionComponent {
 
-    void loadData(MenuPanel menu);
+    void requestInsert(String id, String detail, String re, String date);
 
-    void requestInsert(MenuPanel parent,Event event);
+    void requestDelete(int id);
 
-    void requestDelete(MenuPanel parent,int id);
+    //---experiment
+    int size();
+    Event iterateEvent(int target);
 
-    void requestModify(MenuPanel parent,int id);
 
     String out(String text);
 }

@@ -6,10 +6,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.remoting.rmi.RmiServiceExporter;
 
+import java.rmi.RemoteException;
+
 @SpringBootApplication
 public class CalendarServer {
 
-    @Bean ActionComponent act(){
+    @Bean ActionComponent act() throws RemoteException {
         return new ActionComponentImpl();
     }
 
@@ -33,7 +35,7 @@ public class CalendarServer {
 
         SpringApplication.run(CalendarServer.class, args);
 
-        /*	load EventList to Editor
+        /*
             change Editor in Client to ActionComponent
 
             Client >> AC >> Server

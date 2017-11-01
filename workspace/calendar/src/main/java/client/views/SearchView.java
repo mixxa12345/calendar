@@ -1,4 +1,4 @@
-package views;
+package client.views;
 /**
  * Warit Siasakul  5810405339
  */
@@ -20,17 +20,16 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
-import controllers.EditController;
-import models.Event;
+import common.ActionComponent;
+import common.models.Event;
 
 public class SearchView extends JFrame {
 	private int frameWidth = 640;
 	private int frameHeight = 700;
 	private ArrayList<Event> calendar;
-	private EditController editor;
+	private ActionComponent actionComponent;
 	private JPanel eventFlow = new JPanel();
 	private JButton sButton = new JButton("   search   ");
 
@@ -46,9 +45,9 @@ public class SearchView extends JFrame {
 	private MenuPanel parent;
 
 
-	public SearchView(ArrayList<Event> calendar, EditController editor) {
+	public SearchView(ArrayList<Event> calendar, ActionComponent actionComponent) {
 		this.calendar = calendar;
-		this.editor = editor;
+		this.actionComponent = actionComponent;
 
 		((JLabel) dCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
 		((JLabel) mCom.getRenderer()).setHorizontalAlignment(SwingConstants.CENTER);
@@ -97,7 +96,7 @@ public class SearchView extends JFrame {
 			if (d.equals(cd) && m.equals(cm) && y.equals(cy)) {
 				count++;
 				EventPanel ev = new EventPanel(current.getDate().toLocaleString(), current.getDetail(), current.getId(),
-						editor);
+						actionComponent);
 				ev.setParent(parent);
 				eventFlow.add(ev.mod(current.getRepeater()));
 			}

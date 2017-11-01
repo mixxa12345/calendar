@@ -1,54 +1,62 @@
 package server;
 
 import common.ActionComponent;
-import controllers.DBController;
-import controllers.EditController;
-import models.Event;
+import server.controllers.DBController;
+import server.controllers.EditController;
+import common.models.Event;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
-import views.MainView;
-import views.MenuPanel;
+
+import java.rmi.RemoteException;
 
 import java.text.ParseException;
 
-public class ActionComponentImpl implements ActionComponent {
 
+public class ActionComponentImpl implements ActionComponent {
     private EditController editor;
     private DBController DBC;
 
-    public ActionComponentImpl(){
+    public ActionComponentImpl() throws RemoteException {
         ApplicationContext bf =
-                new ClassPathXmlApplicationContext("controller.xml");
+               new ClassPathXmlApplicationContext("controller.xml");
         DBC = (DBController) bf.getBean("dbc");
         editor = (EditController) bf.getBean("editor");
+
         editor.setDBC(DBC);
+        System.out.println("Server Side DataBase Loading..");
+        DBC.manageDB(editor.getEvents());
+    }
+
+
+    @Override
+    public void requestInsert(String id, String detail, String re, String date) {
         try {
-            DBC.getDB(editor.getEvents());
+            editor.acceptInsert(id, detail, re, date);
         } catch (ParseException e) {
-            System.out.println("ERROR IN AC +++++++++++++++++++*");
             e.printStackTrace();
         }
+        DBC.manageDB(editor.getEvents());
     }
 
     @Override
-    public void loadData(MenuPanel menu) {
-        DBC.loadDBtoMainView(menu);
+    public void requestDelete(int id) {
+        editor.acceptDelete(id);
+        DBC.manageDB(editor.getEvents());
+    }
+
+
+    //-------experiment
+
+    @Override
+    public int size(){
+        return editor.getEvents().size();
     }
 
     @Override
-    public void requestInsert(MenuPanel parent, Event event) {
-        editor.acceptInsert(parent, event);
+    public Event iterateEvent(int target){
+        return editor.getEvents().get(target);
     }
 
-    @Override
-    public void requestDelete(MenuPanel parent,int id) {
-        editor.acceptDelete(parent, id);
-    }
-
-    @Override
-    public void requestModify(MenuPanel parent,int id) {
-        editor.acceptModify(parent, id);
-    }
 
     @Override
     public String out(String text) {

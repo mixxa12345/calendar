@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import controllers.DBController;
+import server.controllers.DBController;
 import junit.framework.*;
-import models.Event;
+import common.models.Event;
 
 public class CalendarTest extends TestCase {
 	

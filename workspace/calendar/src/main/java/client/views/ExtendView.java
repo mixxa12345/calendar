@@ -1,8 +1,7 @@
-package views;
+package client.views;
 /**
  * Warit Siasakul  5810405339
  */
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -18,15 +17,14 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 
-import controllers.EditController;
-import models.Event;
+import common.ActionComponent;
+import common.models.Event;
 
 public class ExtendView extends JPanel {
 
 	private JPanel eventFlow = new JPanel();
-	private EditController editor;
+	private ActionComponent actionComponent;
 	private int state, evCount = 0;
 	private JButton allButton = new JButton("   All   ");
 	private JButton dayButton = new JButton("  Daily  ");
@@ -38,8 +36,8 @@ public class ExtendView extends JPanel {
 
 	private MenuPanel parent;
 
-	public ExtendView(ArrayList<Event> c, EditController editor) {
-		this.editor = editor;
+	public ExtendView(ArrayList<Event> c, ActionComponent actionComponent) {
+		this.actionComponent = actionComponent;
 		calendar = c;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		eventFlow.setLayout(new BoxLayout(eventFlow, BoxLayout.Y_AXIS));
@@ -63,7 +61,7 @@ public class ExtendView extends JPanel {
 		for (int i = 0; i < calendar.size(); i++) {
 			if (!calendar.get(i).getRepeater().equals("-")) {
 				Event ev = calendar.get(i);
-				EventPanel ep = new EventPanel(ev.getDate().toLocaleString(), ev.getDetail(), ev.getId(), editor);
+				EventPanel ep = new EventPanel(ev.getDate().toLocaleString(), ev.getDetail(), ev.getId(), actionComponent);
 				ep.setParent(parent);
 				estimate(ep, calendar.get(i).getRepeater());
 			}
