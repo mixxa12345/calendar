@@ -36,7 +36,5 @@ public class CalendarClient
 
         mc.setAC(actionComponent);
         mc.startApplication();
-
-        System.out.println(actionComponent.out("=================================="));
     }
 }

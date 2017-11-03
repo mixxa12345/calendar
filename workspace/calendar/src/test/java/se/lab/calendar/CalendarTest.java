@@ -7,17 +7,21 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import server.controllers.DBController;
+import server.controllers.EventController;
+import server.controllers.SQLiteManager;
 import junit.framework.*;
 import common.models.Event;
 
 public class CalendarTest extends TestCase {
 	
 	private Event event1, event2, event3, event4;
-	private DBController DBC = new DBController();
-	private ArrayList<Event> events = new ArrayList<Event>();
+	private ArrayList<Event> events = new ArrayList<>();
+	private SQLiteManager sqLiteManager = new SQLiteManager();
+	private EventController eventController = new EventController();
 
 	public void setUp() throws ParseException{
+		eventController.setDatabase(sqLiteManager);
+
 		event1 = new Event("20Aug201716:0" , "movie");
 		event2 = new Event("22Aug201716:30" , "lab");
 		event3 = new Event("1Jan201722:0" , "homework");
@@ -79,31 +83,35 @@ public class CalendarTest extends TestCase {
 		assertFalse(7 == event4.getDate().getMonth());
 		
 	}
-	
+
+	//test DatabaseConnection
 	@Test
 	public void testDBConnection() throws ParseException {
-		
-		DBC.insertDB(event1);
-		DBC.insertDB(event2);
-		DBC.insertDB(event3);
-		DBC.insertDB(event4);
-		
-		ArrayList<Event> testList1 = new ArrayList<Event>();
-		DBC.getDB(testList1);
-		assertEquals(events.size(), testList1.size());
-		assertEquals(events.get(0).toString(), testList1.get(0).toString());
-		assertEquals(events.get(1).toString(), testList1.get(1).toString());
-		assertEquals(events.get(2).toString(), testList1.get(2).toString());
-		assertEquals(events.get(3).toString(), testList1.get(3).toString());
-		
-		DBC.delDB(event1);
-		DBC.delDB(event2);
-		DBC.delDB(event3);
-		DBC.delDB(event4);
-		
-		ArrayList<Event> testList2 = new ArrayList<Event>();
-		DBC.getDB(testList2);
-		assertTrue(0 == testList2.size());
+
+		ArrayList<Event> fixedList = new ArrayList<>();
+		sqLiteManager.getEventsFromDB(fixedList);
+		int fixedSize = fixedList.size();
+
+		eventController.acceptInsert(event1);
+		eventController.acceptInsert(event2);
+		eventController.acceptInsert(event3);
+		eventController.acceptInsert(event4);
+
+		sqLiteManager.getEventsFromDB(eventController.getEvents());
+		ArrayList<Event> testList1 = eventController.getEvents();
+
+		assertEquals(events.get(0).toString(), testList1.get(fixedSize + 0).toString());
+		assertEquals(events.get(1).toString(), testList1.get(fixedSize + 1).toString());
+		assertEquals(events.get(2).toString(), testList1.get(fixedSize + 2).toString());
+		assertEquals(events.get(3).toString(), testList1.get(fixedSize + 3).toString());
+
+		eventController.acceptDelete(event1.getId());
+		eventController.acceptDelete(event2.getId());
+		eventController.acceptDelete(event3.getId());
+		eventController.acceptDelete(event4.getId());
+
+		sqLiteManager.getEventsFromDB(eventController.getEvents());
+		assertTrue(fixedSize == eventController.getEvents().size());
 		
 	}
 }

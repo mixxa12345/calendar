@@ -4,7 +4,6 @@ package client.views;
  */
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -26,12 +25,10 @@ public class EventPanel extends JPanel {
 	private JButton modButton = new JButton(" O ");
 	private int id;
 	private JPanel header;
-	JTextArea text = new JTextArea();
-	private ActionComponent actionComponent;
+	private JTextArea text = new JTextArea();
 	private MenuPanel parent;
 
 	public EventPanel(String s, String d, int iid, ActionComponent actionComponent) {
-		this.actionComponent = actionComponent;
 		this.id = iid;
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBorder(new LineBorder(Color.BLACK, 3));
@@ -42,23 +39,17 @@ public class EventPanel extends JPanel {
 		createDateDetail(d);
 
 		//delete
-		xButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				actionComponent.requestDelete(id);
-				parent.removeEvent(id);
-				decompost();
-				System.out.println("BOOM");
-			}
-		});
+		xButton.addActionListener((ActionEvent arg0) -> {
+            actionComponent.requestDelete(id);
+            parent.removeEvent(id);
+            decompose();
+            System.out.println("deleted");
+        });
 		//modify
-		modButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				select(id);
-			}
-		});
+		modButton.addActionListener(arg0 -> select(id));
 	}
 
-	private void decompost(){
+	private void decompose(){
 		this.removeAll();
 		this.revalidate();
 		parent.refreshScene();
@@ -112,18 +103,6 @@ public class EventPanel extends JPanel {
 
 	public JPanel getHeader() {
 		return header;
-	}
-	
-	public JButton getXButton() {
-		return xButton;
-	}
-
-	public JTextArea getText() {
-		return text;
-	}
-
-	public void setText(String text) {
-		this.text.setText(text);
 	}
 	
 }

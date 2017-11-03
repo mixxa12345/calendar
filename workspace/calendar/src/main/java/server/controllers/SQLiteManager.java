@@ -13,9 +13,21 @@ import java.util.ArrayList;
 
 import common.models.Event;
 
-public class DBController {
+public class SQLiteManager implements CalendarSource{
 
-	public Connection loadDB() {
+	public SQLiteManager() {
+		try {
+			this.createDB();
+		} catch(SQLException e) {
+			//if not found .db file ,then it will auto generate
+		}
+	}
+
+	// inner method call -------------------------------------
+	private Connection reconnect(){
+		return loadDB();
+	}
+	private Connection loadDB() {
 		try {
 			Connection conn = DriverManager.getConnection("jdbc:sqlite:data.db");
 			return conn;
@@ -25,16 +37,16 @@ public class DBController {
 		}
 		return null;
 	}
-
-	public void createDB() throws SQLException {
+	private void createDB() throws SQLException {
 		Connection conn = reconnect();
 		String query = "CREATE TABLE 'event' ( `id` INTEGER, `date` TEXT, `detail` TEXT, `repeater` TEXT )";
 		PreparedStatement statement = conn.prepareStatement(query);
 		statement.executeUpdate();
-		System.out.println("createDB");
+		System.out.println("creating .db file .. .. .. ");
 	}
+	//-------------------------------------------------
 
-	public void insertDB(Event event) {
+	public void insertToDB(Event event) {
 		Connection conn = reconnect();
 		try {
 			if (conn != null) {
@@ -52,7 +64,7 @@ public class DBController {
 		}
 	}
 
-	public void delDB(Event event) {
+	public void deleteToDB(Event event) {
 		Connection conn = reconnect();
 		try {
 			if (conn != null) {
@@ -67,7 +79,7 @@ public class DBController {
 		}
 	}
 
-	public void getDB(ArrayList<Event> events){
+	public void getEventsFromDB(ArrayList<Event> events){
 		events.clear();
 		//loading block --------------------
 		Connection conn = reconnect();
@@ -88,27 +100,11 @@ public class DBController {
 				}
 				conn.close();
 			}
-		} catch (SQLException ex) {
+		} catch (SQLException | ParseException ex) {
 			ex.printStackTrace();
-		} catch (ParseException e) {
-			e.printStackTrace();
 		}
 		//-------------------------------------
 	}
 
-	public void manageDB(ArrayList<Event> events){
-		try {
-			this.createDB();
-		} catch(SQLException e) {
-			//not found DB or something ,but don't affect program work
-		} finally {
-				getDB(events);
-		}
-	}
-
-
-	private Connection reconnect(){
-		return loadDB();
-	}
 
 }

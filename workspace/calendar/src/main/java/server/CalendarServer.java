@@ -36,9 +36,7 @@ public class CalendarServer {
         SpringApplication.run(CalendarServer.class, args);
 
         /*
-            change Editor in Client to ActionComponent
-
-            Client >> AC >> Server
+            Client >> ActionComp >> Server
                   (request)
 
 	*/

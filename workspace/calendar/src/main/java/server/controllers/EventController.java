@@ -7,30 +7,29 @@ import java.util.ArrayList;
 
 import common.models.Event;
 
-public class EditController {
+public class EventController {
 
 	private ArrayList<Event> events = new ArrayList<>();
-	private DBController DBC;
+	private CalendarSource database;
 
 	public void acceptDelete(int id) {
 		for (Event event : events) {
 			if (event.getId() == id) {
 				System.out.println("DELETE:" + event.toString());
-				DBC.delDB(event);
+				database.deleteToDB(event);
 				events.remove(event);
 				break;
 			}
 		}
 	}
 
-	public void acceptInsert(String id, String detail, String re, String date) throws ParseException {
-		Event event = new Event(id, detail, re, date);
+	public void acceptInsert(Event event) throws ParseException {
 		System.out.println("INSERT:" + event.toString());
-		DBC.insertDB(event);
+		database.insertToDB(event);
 	}
 
-	public void setDBC(DBController DBC) {
-		this.DBC = DBC;
+	public void setDatabase(SQLiteManager database) {
+		this.database = database;
 	}
 
 	public ArrayList<Event> getEvents() {

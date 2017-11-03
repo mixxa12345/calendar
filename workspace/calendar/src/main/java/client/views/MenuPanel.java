@@ -65,8 +65,7 @@ public class MenuPanel extends JPanel implements Serializable{
 					dView.setId(-1);
 				}
 				Event event = this.addEventPanel();
-				actionComponent.requestInsert(
-						String.valueOf(event.getId()), event.getDetail(), event.getRepeater(), event.getDateFormat());
+				actionComponent.requestInsert(event);
 				refreshScene();
 			} catch (ParseException e) {
 				//e.printStackTrace();

@@ -5,14 +5,12 @@ import common.models.Event;
 
 public interface ActionComponent {
 
-    void requestInsert(String id, String detail, String re, String date);
+    void requestInsert(Event event);
 
     void requestDelete(int id);
 
-    //---experiment
+    //---get event from database in server
     int size();
     Event iterateEvent(int target);
 
-
-    String out(String text);
 }

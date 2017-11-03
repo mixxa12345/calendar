@@ -19,8 +19,6 @@ public class MainController {
 		frame.getMenu().initMenu();
 
 		System.out.println("Client Side DataBase Loading...");
-
-		//AC.loadData(frame.getMenu().getCalendar());
 		int n = AC.size();
 		System.out.println("Server Size :" + n);
 		for (int i = 0; i < n; i++) {
@@ -28,7 +26,8 @@ public class MainController {
 			frame.getMenu().getCalendar().add(ev);
 			System.out.println(ev);
 		}
-		System.out.println(frame.getMenu().getCalendar().size());
+
+		System.out.println("Client Size :" + frame.getMenu().getCalendar().size());
 
 		frame.getMenu().refreshScene();
 	}
