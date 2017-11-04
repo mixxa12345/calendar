@@ -40,10 +40,16 @@ public class EventPanel extends JPanel {
 
 		//delete
 		xButton.addActionListener((ActionEvent arg0) -> {
-            actionComponent.requestDelete(id);
-            parent.removeEvent(id);
-            decompose();
-            System.out.println("deleted");
+			try {
+				actionComponent.requestDelete(id);
+				parent.removeEvent(id);
+				decompose();
+				System.out.println("deleted");
+			} catch (Exception e) {
+				System.out.println("Can't find on Server");
+				parent.refreshScene();
+			}
+
         });
 		//modify
 		modButton.addActionListener(arg0 -> select(id));
@@ -56,15 +62,21 @@ public class EventPanel extends JPanel {
 	}
 
 	public void select(int id) {
-		Event target = null;
-		for (Event ev : parent.getCalendar()) {
-			if (ev.getId() == id) {
-				target = ev;
+		try {
+			Event target = null;
+			for (Event ev : parent.getCalendar()) {
+				if (ev.getId() == id) {
+					target = ev;
+				}
 			}
+			parent.getdView().setCombo(target);
+			parent.getdView().setId(id);
+			parent.getdView().setVisible(true);
+		} catch (Exception e) {
+			System.out.println("Can't find on Server");
+			parent.refreshScene();
 		}
-		parent.getdView().setCombo(target);
-		parent.getdView().setId(id);
-		parent.getdView().setVisible(true);
+
 	}
 	
 	public JPanel createHeader() {

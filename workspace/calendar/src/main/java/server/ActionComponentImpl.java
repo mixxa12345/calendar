@@ -10,11 +10,13 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import java.rmi.RemoteException;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 
 
 public class ActionComponentImpl implements ActionComponent {
     private EventController editor;
     private SQLiteManager database;
+    private ArrayList<Event> tempEvents;
 
     public ActionComponentImpl() throws RemoteException {
         ApplicationContext bf =
@@ -54,12 +56,13 @@ public class ActionComponentImpl implements ActionComponent {
     //-------
     @Override
     public int size(){
-        return editor.getEvents().size();
+        tempEvents = editor.getEvents();
+        return tempEvents.size();
     }
 
     @Override
     public Event iterateEvent(int target){
-        return editor.getEvents().get(target);
+        return tempEvents.get(target);
     }
 
 }

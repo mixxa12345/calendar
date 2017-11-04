@@ -25,8 +25,9 @@ import common.models.Event;
 public class MenuPanel extends JPanel implements Serializable{
 	private Color c = new Color(0, 0, 0);
 	private JPanel eventFlow = new JPanel();
-	private JButton createButton = new JButton("Create..");
-	private JButton searchButton = new JButton("Search..");
+	private JButton createButton = new JButton("Create");
+	private JButton searchButton = new JButton("Search");
+	private JButton refreshButton = new JButton("Refresh");
 	private DetailView dView = new DetailView();
 	ArrayList<Event> calendar = new ArrayList<>();
 	private ActionComponent actionComponent;
@@ -46,13 +47,16 @@ public class MenuPanel extends JPanel implements Serializable{
 		this.setBackground(c);
 
 		exView.setParent(this);
-		exView.setParent(this);
+		schView.setParent(this);
 
 		createButton.addActionListener(arg -> {
 			dView.setVisible(true);
 		});
 		searchButton.addActionListener(arg ->{
 			schView.setVisible(true);
+		});
+		refreshButton.addActionListener(arg ->{
+			refreshScene();
 		});
 
 		//insert
@@ -77,31 +81,48 @@ public class MenuPanel extends JPanel implements Serializable{
 		refreshScene();
 	}
 
+	private void updateFromDB() {
+		calendar.clear();
+		System.out.println("Client Side DataBase Loading...");
+		// not allow other [Client] use AC
+		synchronized (actionComponent) {
+			int n = actionComponent.size();
+			System.out.println("Events # :" + n);
+			for (int i = 0; i < n; i++) {
+				Event ev = actionComponent.iterateEvent(i);
+				calendar.add(ev);
+				System.out.println(ev);
+		}
+
+		}
+
+		//refreshScene();
+	}
+
 	private JComponent CreateTopMenu() {
 		JPanel inner = new JPanel();
 		inner.setLayout(new BorderLayout());
 		inner.setBackground(c);
-		JLabel head = new JLabel("Date Calendar");
-		head.setForeground(Color.WHITE);
-		head.setFont(new Font("Arial Black", Font.PLAIN, 20));
-		head.setBackground(c);
-		head.setOpaque(true);
 		
-		searchButton.setPreferredSize(new Dimension(100, 20));
+		//searchButton.setPreferredSize(new Dimension(100, 20));
+		searchButton.setPreferredSize(new Dimension(110, 50));
 		searchButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
-		createButton.setPreferredSize(new Dimension(100, 50));
+		createButton.setPreferredSize(new Dimension(110, 50));
 		createButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
+		refreshButton.setPreferredSize(new Dimension(100, 50));
+		refreshButton.setFont(new Font("Arial Black", Font.PLAIN, 15));
 
 		JPanel inn = new JPanel();
 		inn.setBackground(c);
 		inn.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		inn.add(head);
-		inn.add(Box.createRigidArea(new Dimension(35, 10)));
+		//inn.add(head);
+		//inn.add(Box.createRigidArea(new Dimension(35, 10)));
+		inn.add(refreshButton);
 		inn.add(searchButton);
 		inn.add(createButton);
 
 		inner.add(inn, BorderLayout.NORTH);
-		inner.add(searchButton);
+		//inner.add(Box.createRigidArea(new Dimension(100, 20)));
 		
 
 		JScrollPane EScroll = new JScrollPane(eventFlow);
@@ -162,6 +183,7 @@ public class MenuPanel extends JPanel implements Serializable{
 	}
 
 	public void refreshScene() {
+		updateFromDB();
 		//force update to all view
 		//1
 		eventFlow.removeAll();
